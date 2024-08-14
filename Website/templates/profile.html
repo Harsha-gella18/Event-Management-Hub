@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-10">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Profile Details</h2>
+    
+    <!-- Profile Details Section -->
+    <div class="p-4 bg-gray-100 rounded-lg shadow-inner">
+        <p><strong>Username:</strong> {{ session.username }}</p>
+        <p><strong>Email:</strong> {{ session.email }}</p>
+        <p><strong>Role:</strong> {{ session.role }}</p>
+    </div>
+
+    <!-- Back to Dashboard Button -->
+    <div class="mt-6">
+        <a href="{{ url_for('auth.dashboard') }}" class="btn-learn-more text-white font-bold py-2 px-4 rounded-lg">Back to Dashboard</a>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}View All Events{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-6xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-10">
+    <h2 class="text-3xl font-bold mb-8 text-gray-800">All Events</h2>
+
+    <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+        <thead>
+            <tr class="w-full bg-gray-100 border-b border-gray-200">
+                <th class="py-2 px-4 text-left text-gray-600">Title</th>
+                <th class="py-2 px-4 text-left text-gray-600">Date</th>
+                <th class="py-2 px-4 text-left text-gray-600">Time</th>
+                <th class="py-2 px-4 text-left text-gray-600">Location</th>
+                <th class="py-2 px-4 text-left text-gray-600">Description</th>
+                <th class="py-2 px-4 text-left text-gray-600">Price</th>
+                <th class="py-2 px-4 text-left text-gray-600">Total Count</th>
+                <th class="py-2 px-4 text-left text-gray-600">Slots Left</th>
+                <th class="py-2 px-4 text-left text-gray-600">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr class="border-b border-gray-200">
+                <td class="py-2 px-4">{{ event.title }}</td>
+                <td class="py-2 px-4">{{ event.date }}</td>
+                <td class="py-2 px-4">{{ event.time }}</td>
+                <td class="py-2 px-4">{{ event.location }}</td>
+                <td class="py-2 px-4">{{ event.description }}</td>
+                <td class="py-2 px-4">{{ event.price }}</td>
+                <td class="py-2 px-4">{{ event.TotalCount }}</td>
+                <td class="py-2 px-4">{{ event.SlotsLeft }}</td>
+                <td class="py-2 px-4 flex space-x-4">
+                    <!-- Edit button -->
+                    <form action="{{ url_for('superadmin.edit_event_by_admin', event_id=event._id) }}" method="get">
+                        <button type="submit" class="text-blue-500 hover:text-blue-700">
+                            Edit
+                        </button>
+                    </form>
+                    
+                    <!-- Delete button -->
+                    <form action="{{ url_for('superadmin.delete_event_by_admin', event_id=event._id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this event?');">
+                        <button type="submit" class="text-red-500 hover:text-red-700">
+                            Delete
+                        </button>
+                    </form>
+
+                    <!-- Registered button -->
+                    <form action="{{ url_for('superadmin.view_registered_users', event_id=event._id) }}" method="get">
+                        <button type="submit" class="text-green-500 hover:text-green-700">
+                            Registered
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}User Dashboard{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-6xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-10">
+    <h2 class="text-3xl font-bold mb-8 text-gray-800">Welcome, {{ session.username }}</h2>
+
+    <div class="mb-8">
+        <h3 class="text-2xl font-semibold mb-6 text-gray-700">Upcoming Events</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for event in events %}
+            <div class="p-6 bg-gray-100 rounded-lg shadow-md">
+                <h4 class="text-xl font-semibold mb-2">{{ event.title }}</h4>
+                <p class="text-sm text-gray-600"><strong>Date:</strong> {{ event.date }}</p>
+                <p class="text-sm text-gray-600"><strong>Time:</strong> {{ event.time }}</p>
+                <p class="text-sm text-gray-600"><strong>Location:</strong> {{ event.location }}</p>
+                <p class="text-sm text-gray-600"><strong>Description:</strong> {{ event.description }}</p>
+                <p class="text-sm text-gray-600"><strong>Organizer:</strong> {{ event.organizer }}</p>
+                <p class="text-sm text-gray-600"><strong>Price:</strong> {{ event.price }}</p>
+                <p class="text-sm text-gray-600"><strong>Total Count:</strong> {{ event.TotalCount }}</p>
+                <p class="text-sm text-gray-600"><strong>Slots Left:</strong> {{ event.SlotsLeft }}</p>
+
+                <!-- Register, message, or unregister button based on registration status -->
+                {% if event.SlotsLeft > 0 %}
+                    {% if event._id|string in registered_events %}
+                    <div class="mt-4">
+                        <p class="text-green-500 mb-2">You are already registered for this event.</p>
+                        <form action="{{ url_for('auth.unregister_event') }}" method="post">
+                            <input type="hidden" name="event_id" value="{{ event._id }}">
+                            <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700">Unregister</button>
+                        </form>
+                    </div>
+                    {% else %}
+                    <form action="{{ url_for('auth.register_event') }}" method="post">
+                        <input type="hidden" name="event_id" value="{{ event._id }}">
+                        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700">Register</button>
+                    </form>
+                    {% endif %}
+                    {% else %}
+                    {% if event._id|string in registered_events %}
+                    <div class="mt-4">
+                        <p class="text-green-500 mb-2">You are already registered for this event. No more slots available.</p>
+                        <form action="{{ url_for('auth.unregister_event') }}" method="post">
+                            <input type="hidden" name="event_id" value="{{ event._id }}">
+                            <button type="submit" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700">Unregister</button>
+                        </form>
+                    </div>
+                    {% else %}
+                    <p class="text-red-500 mt-4">No slots available</p>
+                    {% endif %}
+                    {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    // Optional: Add any JavaScript for dynamic functionality
+</script>
+{% endblock %}

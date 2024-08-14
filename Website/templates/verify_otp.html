@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Verify OTP{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg mt-10">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">Verify OTP</h2>
+    <!-- Use the action URL provided by the context variable -->
+    <form action="{{ action_url }}" method="post">
+        <div class="mb-4">
+            <label for="otp" class="block text-gray-700">Enter OTP</label>
+            <input type="text" id="otp" name="otp" class="input-field w-full px-3 py-2" required>
+        </div>
+        <button type="submit" class="btn-login text-white font-bold py-2 px-4 rounded-lg w-full">Verify OTP</button>
+    </form>
+</div>
+{% endblock %}

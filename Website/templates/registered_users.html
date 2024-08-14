@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Registered Users{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-6xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-10">
+    <h2 class="text-3xl font-bold mb-8 text-gray-800">Registered Users for Event: {{ event.title }}</h2>
+
+    {% if registered_users %}
+    <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+        <thead>
+            <tr class="w-full bg-gray-100 border-b border-gray-200">
+                <th class="py-2 px-4 text-left text-gray-600">Name</th>
+                <th class="py-2 px-4 text-left text-gray-600">Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in registered_users %}
+            <tr class="border-b border-gray-200">
+                <td class="py-2 px-4">{{ user.username }}</td>
+                <td class="py-2 px-4">{{ user.email }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-gray-600">No users registered for this event.</p>
+    {% endif %}
+</div>
+{% endblock %}

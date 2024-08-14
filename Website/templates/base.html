@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Event Management System{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <style>
+        .hero-bg {
+            background: linear-gradient(to right, #000000, #333333); /* Black gradient */
+        }
+        .btn-learn-more {
+            background: #000000; /* Black */
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        .btn-learn-more:hover {
+            background: #333333; /* Darker Black */
+            transform: scale(1.05);
+        }
+        .header-shadow {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .navbar-bg {
+            background: #000000; /* Black */
+            color: #FFFFFF; /* White text */
+        }
+        .navbar-link {
+            color: #FFFFFF; /* White text */
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+        }
+        .navbar-link:hover {
+            color: #CCCCCC; /* Light Grey */
+            border-bottom: 2px solid #CCCCCC;
+        }
+        .login-bg {
+            background: #000000; /* Black */
+        }
+        .input-field {
+            border: 1px solid #FFFFFF; /* White */
+            border-radius: 0.375rem;
+        }
+        .input-field:focus {
+            border-color: #CCCCCC; /* Light Grey */
+            outline: none;
+            box-shadow: 0 0 0 1px #CCCCCC;
+        }
+        .btn-login {
+            background: #000000; /* Black */
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        .btn-login:hover {
+            background: #333333; /* Darker Black */
+            transform: scale(1.05);
+        }
+        .flash-message {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 0.375rem;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 500;
+            position: relative;
+        }
+        .flash-message.success {
+            background-color: #28a745; /* Green for success */
+        }
+        .flash-message.danger {
+            background-color: #dc3545; /* Red for danger */
+        }
+        .flash-message .close-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: transparent;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+    </style>
+</head>
+<body class="bg-black min-h-screen flex flex-col">
+    <header class="navbar-bg header-shadow py-4">
+        <nav class="container mx-auto p-4 flex justify-between items-center">
+            <a href="#" class="text-3xl font-extrabold">Event Management Hub</a>
+            <ul class="flex space-x-6">
+                {% if 'username' in session %}
+                    <!-- User is logged in -->
+                    <li><a href="{{ url_for('auth.dashboard') }}" class="navbar-link text-lg font-medium hover:underline">Dashboard</a></li>
+                    <li><a href="{{ url_for('auth.logout') }}" class="navbar-link text-lg font-medium hover:underline">Logout</a></li>
+                    <li><a href="{{ url_for('auth.profile') }}" class="navbar-link text-lg font-medium hover:underline">
+                        <img src="../static/profileicon.png" alt="Profile" class="w-8 h-8 rounded-full">
+                    </a></li>
+                {% else %}
+                    <!-- User is not logged in -->
+                    <li><a href="/login" class="navbar-link text-lg font-medium hover:underline">Login</a></li>
+                    <li><a href="/signup" class="navbar-link text-lg font-medium hover:underline">Sign Up</a></li>
+                    <li><a href="/" class="navbar-link text-lg font-medium hover:underline">Home</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <main class="bg-black flex-grow flex flex-col items-center justify-center text-center py-16 px-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="space-y-4">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            <button class="close-btn" onclick="this.parentElement.style.display='none'">&times;</button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}
+        <section class="hero-bg text-white py-16 px-4 w-full flex flex-col items-center justify-center">
+            <h1 class="text-4xl font-bold mb-4">Welcome to Event Management Hub</h1>
+            <p class="text-lg mb-8">Manage and track your events seamlessly with our intuitive platform. Get started today!</p>
+            <a href="/about" class="btn-learn-more text-white py-2 px-4 rounded-lg">Learn More</a>
+        </section>
+        <!-- Content will be injected here -->
+        {% endblock %}
+    </main>
+    <footer class="bg-black text-white py-4 mt-auto">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Event Management Hub. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
