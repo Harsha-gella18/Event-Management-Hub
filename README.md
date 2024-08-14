@@ -10,6 +10,14 @@ An intuitive web application for managing and tracking events. This system allow
   - **Admin**: Can manage events, including adding, updating, and deleting events.
   - **Superadmin**: Can manage all users and admins, and oversee the entire system.
 
+## Tools & Technologies
+
+- **Flask**: A lightweight WSGI web application framework in Python.
+- **MongoDB**: NoSQL database used for storing user and event data.
+- **Python**: Programming language used for backend development.
+- **HTML**: Markup language for creating web pages.
+- **Tailwind CSS**: Utility-first CSS framework for designing responsive, modern web interfaces.
+  
 ## Installation
 
 1. **Clone the repository:**
