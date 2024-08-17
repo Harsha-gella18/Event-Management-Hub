@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request, session, flash
+from flask import Blueprint, render_template, redirect, url_for, request, session, flash,make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import get_user, create_user, get_events, get_events_by_organizer, get_event_by_id, update_event, register_user_for_event, unregister_user_from_event, get_user_by_email, reset_user_password
 from .utils import send_otp_email, verification, login_required, admin_required, user_required
@@ -38,7 +38,8 @@ def register():
         session['role'] = role
 
         return redirect(url_for('auth.verify_signup_otp'))
-
+    if session:
+        return redirect(url_for('auth.dashboard'))
     return render_template('signup.html')
 
 @auth.route('/verify_password_reset_otp', methods=['GET', 'POST'])
@@ -95,7 +96,13 @@ def login():
         else:
             flash('User not found. Please try again.', 'danger')
             session['isLogin'] = False
-
+    if session:
+        if session.get('role',None) == 'user':
+            return redirect(url_for('auth.user_dashboard'))
+        elif session.get('role',None) == 'super_admin':
+            return redirect(url_for('auth.superadmin_dashboard'))
+        elif session.get('role',None) == 'admin':
+            return redirect(url_for('auth.admin_dashboard'))
     return render_template('login.html')
 
 @auth.route('/dashboard')
@@ -111,14 +118,25 @@ def dashboard():
         flash('Unauthorized access.', 'danger')
         return redirect(url_for('auth.login'))
 
+
 @auth.route('/logout')
 def logout():
-    session.pop('username', None)
-    session.pop('role', None)
-    session.pop('isLogin', None)
+    # Clear the session
+    session.clear()
+
+    # Create a response object to modify cookies
+    response = make_response(redirect(url_for('auth.login')))
+
+    # Explicitly remove the session cookie by setting its expiration to the past
+    response.set_cookie('session', '', expires=0)
+
+    # Flash a logout message
     flash('You have been logged out.', 'info')
-    print("Session after logout:", session)  # Debug statement
-    return redirect(url_for('auth.login'))
+
+    # Optional: Debug print to check the session after logout
+    print("Session after logout:", session)
+
+    return response
 
 @auth.route('/profile')
 @login_required
