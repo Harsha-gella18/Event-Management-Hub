@@ -133,8 +133,6 @@ def logout():
     # Flash a logout message
     flash('You have been logged out.', 'info')
 
-    # Optional: Debug print to check the session after logout
-    print("Session after logout:", session)
 
     return response
 
@@ -251,3 +249,8 @@ def reset_password():
                 flash('Failed to reset password. Please try again.', 'danger')
 
     return render_template('reset_password.html')
+
+
+@auth.route('/about',methods=['GET'])
+def about():
+    return render_template('learn_more.html')
