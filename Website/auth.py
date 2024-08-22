@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request, session, flash,make_response
+from flask import Blueprint, render_template, redirect, url_for, request, session, flash, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from .models import get_user, create_user, get_events, get_events_by_organizer, get_event_by_id, update_event, register_user_for_event, unregister_user_from_event, get_user_by_email, reset_user_password
 from .utils import send_otp_email, verification, login_required, admin_required, user_required
@@ -36,9 +36,10 @@ def register():
         session['username'] = username
         session['password'] = password
         session['role'] = role
-
+        print(role)
         return redirect(url_for('auth.verify_signup_otp'))
-    if session:
+
+    if 'username' in session:
         return redirect(url_for('auth.dashboard'))
     return render_template('signup.html')
 
@@ -96,12 +97,13 @@ def login():
         else:
             flash('User not found. Please try again.', 'danger')
             session['isLogin'] = False
-    if session:
-        if session.get('role',None) == 'user':
+
+    if 'username' in session:
+        if session.get('role', None) == 'user':
             return redirect(url_for('auth.user_dashboard'))
-        elif session.get('role',None) == 'super_admin':
+        elif session.get('role', None) == 'super_admin':
             return redirect(url_for('auth.superadmin_dashboard'))
-        elif session.get('role',None) == 'admin':
+        elif session.get('role', None) == 'admin':
             return redirect(url_for('auth.admin_dashboard'))
     return render_template('login.html')
 
@@ -118,7 +120,6 @@ def dashboard():
         flash('Unauthorized access.', 'danger')
         return redirect(url_for('auth.login'))
 
-
 @auth.route('/logout')
 def logout():
     # Clear the session
@@ -132,9 +133,6 @@ def logout():
 
     # Flash a logout message
     flash('You have been logged out.', 'info')
-
-    # Optional: Debug print to check the session after logout
-    print("Session after logout:", session)
 
     return response
 
@@ -251,3 +249,7 @@ def reset_password():
                 flash('Failed to reset password. Please try again.', 'danger')
 
     return render_template('reset_password.html')
+
+@auth.route('/about', methods=['GET'])
+def about():
+    return render_template('learn_more.html')

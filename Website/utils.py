@@ -12,9 +12,9 @@ load_dotenv()  # Load environment variables
 def send_otp_email(mail):
     otp = str(random.randint(100000, 999999))  # Generate a 6-digit OTP
     session['otp'] = otp  # Store the OTP in session for verification
-
+    print(otp)
     sender_email = os.getenv('SENDER_EMAIL')
-    receiver_email = mail
+    receiver_email = mail  # Fixed assignment here
     subject = 'Your OTP Code'
     body = f'Your OTP code is {otp}'
 
