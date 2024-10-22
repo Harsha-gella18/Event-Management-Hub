@@ -136,10 +136,10 @@ def logout():
 
     return response
 
-@auth.route('/profile')
-@login_required
-def profile():
-    return render_template('profile.html')
+# @auth.route('/profile')
+# @login_required
+# def profile():
+#     return render_template('profile.html')
 
 # Define admin routes with admin_required decorator
 @auth.route('/admin_dashboard')
@@ -250,6 +250,30 @@ def reset_password():
 
     return render_template('reset_password.html')
 
+
 @auth.route('/about', methods=['GET'])
 def about():
     return render_template('learn_more.html')
+
+
+@auth.route('/profile')
+@login_required
+def profile():
+    # Ensure the user is logged in and session has 'username'
+    if 'username' in session:
+        # Retrieve user details
+        user = get_user(session['username'])
+        
+        # Retrieve translation history for the user
+        translation_history = get_translation_history(session['username'])
+        
+        # Reverse the translation history to show the most recent first
+        translation_history = translation_history[::-1]
+        
+        # Render the profile template with user and translation data
+        return render_template('profile.html', user=user, translations=translation_history)
+    else:
+        # If the user is not logged in, redirect to login page with a flash message
+        flash('Please log in to view your profile.', 'danger')
+        return redirect(url_for('auth.login'))
+
